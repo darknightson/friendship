@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -19,15 +21,28 @@ public class FriendshipService {
     }
 
     /*
+    사용자의 친구 리스트 조회
+     */
+    public List<FriendshipResponse> findMutualAcceptedFriendships(Long id) {
+        return FriendshipResponse.from(friendshipRepository.findMutualAcceptedFriendships(id));
+    }
+
+    /*
+    사용자가 수신한 친구 신청 리스트 조회
+     */
+    public List<FriendshipResponse> findByToIdAndStatus(Long toId, FriendshipStatus status) {
+        return FriendshipResponse.from(friendshipRepository.findByToIdAndStatus(toId, status));
+    }
+
+    /*
     친구 관계 요청
      */
     @Transactional
-    public Friendship create(Long toUserId, Long fromUserId) {
-        User toUser = userRepository.findById(toUserId).orElseThrow();
+    public Friendship create(Long fromUserId, Long toUserId) {
         User fromUser = userRepository.findById(fromUserId).orElseThrow();
-        return friendshipRepository.save(Friendship.create(toUser, fromUser));
+        User toUser = userRepository.findById(toUserId).orElseThrow();
+        return friendshipRepository.save(Friendship.create(fromUser, toUser));
     }
-
     /*
     친구관계 수락
      */
