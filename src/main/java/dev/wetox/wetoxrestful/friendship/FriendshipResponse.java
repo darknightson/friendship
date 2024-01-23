@@ -14,15 +14,15 @@ import static java.util.stream.Collectors.toList;
 public class FriendshipResponse {
 
     private Long friendshipId;
-    private Long toUserId;
-    private String toUserNickname;
+    private Long fromUserId;
+    private String fromUserNickname;
     private LocalDateTime requestedDate;
 
     public static FriendshipResponse from(Friendship friendship) {
         return FriendshipResponse.builder()
                 .friendshipId(friendship.getId())
-                .toUserId(friendship.getTo().getId())
-                .toUserNickname(friendship.getTo().getNickname())
+                .fromUserId(friendship.getFrom().getId())
+                .fromUserNickname(friendship.getFrom().getNickname())
                 .requestedDate(friendship.getCreatedAt())
                 .build();
     }

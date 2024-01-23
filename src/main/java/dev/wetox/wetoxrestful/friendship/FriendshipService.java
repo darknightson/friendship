@@ -16,10 +16,6 @@ public class FriendshipService {
     private final FriendshipRepository friendshipRepository;
     private final UserRepository userRepository;
 
-    public Friendship findById(Long id) {
-        return friendshipRepository.findById(id).orElseThrow();
-    }
-
     /*
     사용자의 친구 리스트 조회
      */
@@ -38,18 +34,22 @@ public class FriendshipService {
     친구 관계 요청
      */
     @Transactional
-    public Friendship create(Long fromUserId, Long toUserId) {
-        User fromUser = userRepository.findById(fromUserId).orElseThrow();
+    public void create(Long toUserId, Long fromUserId) {
+
+        // 조회 전 친구관계가 존재하는지 확인
+        friendshipRepository.findByToIdAndFromId(toUserId, fromUserId).ifPresent(friendship -> {
+            throw new IllegalStateException("이미 친구관계가 존재합니다.");
+        });
         User toUser = userRepository.findById(toUserId).orElseThrow();
-        return friendshipRepository.save(Friendship.create(fromUser, toUser));
+        User fromUser = userRepository.findById(fromUserId).orElseThrow();
+        friendshipRepository.save(Friendship.create(toUser, fromUser));
     }
     /*
     친구관계 수락
      */
     @Transactional
-    public Friendship accept(Long id) {
-        Friendship friendship = friendshipRepository.findById(id).orElseThrow();
+    public void accept(Long toId, Long fromId) {
+        Friendship friendship = friendshipRepository.findByToIdAndFromId(toId, fromId).orElseThrow();
         friendship.accept();
-        return friendship;
     }
 }

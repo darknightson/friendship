@@ -39,10 +39,10 @@ public class Friendship extends BaseEntity {
     }
 
     // 친구 요청 생성
-    public static Friendship create(User from, User to) {
+    public static Friendship create(User toUser, User fromUser) {
         return Friendship.builder()
-                .from(from)
-                .to(to)
+                .from(fromUser)
+                .to(toUser)
                 .status(FriendshipStatus.REQUEST) // 최초 생성에는 친구 요청 상태이다.
                 .build();
     }

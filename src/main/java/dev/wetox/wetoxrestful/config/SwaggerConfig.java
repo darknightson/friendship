@@ -27,9 +27,16 @@ public class SwaggerConfig {
     }
 
     private Info apiInfo() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("1. 테스트를 위해 유저는 InitDB.java 에서 생성하였습니다. \n");
+        sb.append("2. 먼저 post 매핑을 통한 친구 관계를 신청하세요 \n");
+        sb.append("3. 다음으로 나에게 온 요청을 확인하세요 \n");
+        sb.append("4. put 요청으로 친구요청을 수락하세요 \n");
+        sb.append("5. 상대방도 친구 요청을 위와 같이 해주셔야 accept 친구 관계가 성립 됩니다. \n");
+
         return new Info()
                 .title("Friendship API")
-                .description("친구 관계 API")
+                .description(sb.toString())
                 .version("1.0.0");
     }
 }
